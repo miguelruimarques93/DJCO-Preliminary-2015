@@ -12,8 +12,6 @@ UCLASS()
 class ROBOTSVSENGINEERS_API ARobotsVSEngineersGameMode : public AGameMode
 {
 	GENERATED_BODY()
-	
-	
-	
-	
+
+	ARobotsVSEngineersGameMode(const class FObjectInitializer&);
 };
