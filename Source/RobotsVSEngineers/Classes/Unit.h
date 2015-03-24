@@ -3,10 +3,13 @@
 #pragma once
 
 #include "GameFramework/Character.h"
+
+#include "FactionInterface.h"
+
 #include "Unit.generated.h"
 
 UCLASS()
-class ROBOTSVSENGINEERS_API AUnit : public ACharacter
+class ROBOTSVSENGINEERS_API AUnit : public ACharacter, public IFactionInterface
 {
 	GENERATED_BODY()
 
@@ -22,6 +25,12 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+
+	UFUNCTION(BlueprintCallable, Category=Game)
+	virtual UFaction GetFaction() const override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Unit)
+	UFaction Faction;
 
 	
 	

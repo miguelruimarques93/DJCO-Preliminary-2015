@@ -34,3 +34,7 @@ void AUnit::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 
 }
 
+UFaction AUnit::GetFaction() const
+{
+	return Faction;
+}
