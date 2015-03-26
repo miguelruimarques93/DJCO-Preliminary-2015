@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 
 #include "FactionInterface.h"
+#include "Types.h"
 
 #include "Unit.generated.h"
 
@@ -32,6 +33,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Unit)
 	UFaction Faction;
 
+	UPROPERTY(EditDefaultsOnly, Category = Unit)
+	FPawnStats Stats;
 	
 	
 };
