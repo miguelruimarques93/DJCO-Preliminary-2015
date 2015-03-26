@@ -9,30 +9,30 @@ enum class UType : uint8
 	Poison
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FPawnStats
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Data)
 	int32 BaseHealthPoints;
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Data)
 	int32 Attack;
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Data)
 	int32 AttackRange;
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Data)
 	int32 AttackSpeed;
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Data)
 	int32 SpawnTime;
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Data)
 	UType AttackType;
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Data)
 	TArray<UType> DefenseTypes;
 
 	FPawnStats()

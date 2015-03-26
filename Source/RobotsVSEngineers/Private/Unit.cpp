@@ -17,6 +17,7 @@ AUnit::AUnit()
 void AUnit::BeginPlay()
 {
 	Super::BeginPlay();
+	Health = Stats.BaseHealthPoints;
 	
 }
 
@@ -37,4 +38,93 @@ void AUnit::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 UFaction AUnit::GetFaction() const
 {
 	return Faction;
+}
+
+void AUnit::Die(AActor* DamageCauser)
+{
+	// turn off collision
+	if (GetCapsuleComponent())
+	{
+		GetCapsuleComponent()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_Pawn, ECR_Ignore);
+		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
+	}
+
+	// turn off movement
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->StopMovementImmediately();
+		GetCharacterMovement()->DisableMovement();
+	}
+
+	// detach the controller
+	if (Controller != NULL)
+	{
+		Controller->UnPossess();
+	}
+
+	float animLen = 0.f;
+	if (DeathAnimation) {
+		animLen = this->PlayAnimMontage(this->DeathAnimation);
+		auto AnimInstance = GetMesh() ? GetMesh()->GetAnimInstance() : nullptr;
+	}
+
+	/* TODO give points to killer faction */
+
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AUnit::PostMortem, animLen, false);
+}
+
+void AUnit::Attack(APawn* AttackTarget)
+{
+	if (ATarget)
+		return;
+
+	ATarget = AttackTarget;
+
+	float animLen = 0.f;
+	if (AttackAnimation) {
+		animLen = this->PlayAnimMontage(this->AttackAnimation);
+		auto AnimInstance = GetMesh() ? GetMesh()->GetAnimInstance() : nullptr;
+	}
+
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AUnit::ActualAttack, animLen, false);
+}
+
+void AUnit::ActualAttack()
+{
+	TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
+	FDamageEvent DamageEvent(ValidDamageTypeClass);
+
+	ATarget->TakeDamage(this->Stats.Attack, DamageEvent, Controller, this);
+	ATarget = nullptr;
+}
+
+
+void AUnit::PostMortem()
+{
+	SetActorHiddenInGame(true); SetLifeSpan(0.01f);
+}
+
+float AUnit::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	if (Health <= 0) {
+		return 0.f;
+	}
+
+	/* TODO modify damage */
+
+	if (Damage > 0.f) {
+		Health -= Damage;
+
+		if (Health <= 0.f) {
+			/* TODO die*/
+			Die(DamageCauser);
+		}
+
+
+	}
+
+	return Damage;
 }
