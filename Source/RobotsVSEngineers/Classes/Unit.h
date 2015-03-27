@@ -42,7 +42,10 @@ public:
 	UFaction Faction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
-	UAnimationAsset* DeathAnimation;
+	UAnimSequence* DeathAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
+	UAnimSequence* AttackAnimation;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Unit)
 	FPawnStats Stats;
@@ -54,8 +57,6 @@ public:
 	uint8 bIsDead : 1;
 
 	void Die(AActor* DamageCauser);
-
-	void PostMortem();
 
 	UFUNCTION(BlueprintCallable, Category = Game)
 	void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

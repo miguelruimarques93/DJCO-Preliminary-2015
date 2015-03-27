@@ -67,24 +67,6 @@ void AUnit::Die(AActor* DamageCauser)
 	{
 		Controller->UnPossess();
 	}
-
-	float animLen = 0.f;
-	auto mesh = GetMesh();
-	if (mesh && DeathAnimation) {
-		mesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-		mesh->PlayAnimation(DeathAnimation, false);
-		animLen = DeathAnimation->GetMaxCurrentTime();
-	}
-
-	/* TODO give points to killer faction */
-
-	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AUnit::PostMortem, animLen, false);
-}
-
-void AUnit::PostMortem()
-{
-	SetActorHiddenInGame(true); SetLifeSpan(0.01f);
 }
 
 void AUnit::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
