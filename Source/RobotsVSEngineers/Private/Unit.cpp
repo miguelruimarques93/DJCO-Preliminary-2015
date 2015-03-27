@@ -11,6 +11,9 @@ AUnit::AUnit()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	PrimaryActorTick.bAllowTickOnDedicatedServer = true;
+
+	bIsDead = false;
+	bIsAttacking = false;
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +45,8 @@ UFaction AUnit::GetFaction() const
 
 void AUnit::Die(AActor* DamageCauser)
 {
+	bIsDead = true;
+
 	// turn off collision
 	if (GetCapsuleComponent())
 	{
@@ -64,9 +69,11 @@ void AUnit::Die(AActor* DamageCauser)
 	}
 
 	float animLen = 0.f;
-	if (DeathAnimation) {
-		animLen = this->PlayAnimMontage(this->DeathAnimation);
-		auto AnimInstance = GetMesh() ? GetMesh()->GetAnimInstance() : nullptr;
+	auto mesh = GetMesh();
+	if (mesh && DeathAnimation) {
+		mesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+		mesh->PlayAnimation(DeathAnimation, false);
+		animLen = DeathAnimation->GetMaxCurrentTime();
 	}
 
 	/* TODO give points to killer faction */
@@ -74,33 +81,6 @@ void AUnit::Die(AActor* DamageCauser)
 	FTimerHandle TimerHandle;
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &AUnit::PostMortem, animLen, false);
 }
-
-void AUnit::Attack(APawn* AttackTarget)
-{
-	if (ATarget)
-		return;
-
-	ATarget = AttackTarget;
-
-	float animLen = 0.f;
-	if (AttackAnimation) {
-		animLen = this->PlayAnimMontage(this->AttackAnimation);
-		auto AnimInstance = GetMesh() ? GetMesh()->GetAnimInstance() : nullptr;
-	}
-
-	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AUnit::ActualAttack, animLen, false);
-}
-
-void AUnit::ActualAttack()
-{
-	TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
-	FDamageEvent DamageEvent(ValidDamageTypeClass);
-
-	ATarget->TakeDamage(this->Stats.Attack, DamageEvent, Controller, this);
-	ATarget = nullptr;
-}
-
 
 void AUnit::PostMortem()
 {

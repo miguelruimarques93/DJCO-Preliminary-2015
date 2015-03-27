@@ -14,8 +14,8 @@ class ROBOTSVSENGINEERS_API AUnit : public ACharacter, public IFactionInterface
 {
 	GENERATED_BODY()
 
-
 	APawn* ATarget = nullptr;
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	int32 Health;
@@ -41,18 +41,18 @@ public:
 	UFaction Faction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
-	UAnimMontage* DeathAnimation;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
-	UAnimMontage* AttackAnimation;
+	UAnimationAsset* DeathAnimation;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Unit)
 	FPawnStats Stats;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
+	uint8 bIsAttacking : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
+	uint8 bIsDead : 1;
+
 	void Die(AActor* DamageCauser);
 
-	virtual void Attack(APawn* AttackTarget);
-
 	void PostMortem();
-
-	void ActualAttack();
 };
