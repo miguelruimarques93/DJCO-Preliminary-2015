@@ -14,3 +14,13 @@ bool URobotsVSEngineersFunctionLibrary::AreEnemies(AActor* Actor1, AActor* Actor
 {
 	return ARobotsVSEngineersGameMode::OnEnemyFaction(Actor1, Actor2);
 }
+
+bool URobotsVSEngineersFunctionLibrary::IsUnitAlive(AActor* Actor)
+{
+	return ARobotsVSEngineersGameMode::IsUnitAlive(Actor);
+}
+
+bool URobotsVSEngineersFunctionLibrary::IsUnitDead(AActor* Actor)
+{
+	return ARobotsVSEngineersGameMode::IsUnitDead(Actor);
+}

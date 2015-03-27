@@ -21,7 +21,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = Game)
 	static bool AreEnemies(AActor* Actor1, AActor* Actor2);
 	
+	UFUNCTION(BlueprintPure, Category = Game)
+	static bool IsUnitAlive(AActor* Actor);
 	
-	
-	
+	UFUNCTION(BlueprintPure, Category = Game)
+	static bool IsUnitDead(AActor* Actor);
 };

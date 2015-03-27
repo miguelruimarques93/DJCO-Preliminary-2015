@@ -19,4 +19,8 @@ public:
 	static bool OnAllyFaction(const AActor* ActorA, const AActor* ActorB);
 
 	static bool OnEnemyFaction(const AActor* ActorA, const AActor* ActorB);
+	
+	static bool IsUnitAlive(AActor* Actor);
+	
+	static bool IsUnitDead(AActor* Actor);
 };

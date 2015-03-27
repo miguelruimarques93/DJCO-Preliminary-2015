@@ -3,6 +3,7 @@
 #include "RobotsVSEngineers.h"
 #include "RobotsVSEngineersGameMode.h"
 #include "Mouse_PlayerController.h"
+#include "Unit.h"
 
 #include "FactionInterface.h"
 
@@ -26,4 +27,18 @@ bool ARobotsVSEngineersGameMode::OnEnemyFaction(const AActor* ActorA, const AAct
 	auto TeamB = Cast<const IFactionInterface>(ActorB);
 
 	return (TeamA != nullptr) && (TeamB != nullptr) && (TeamA->GetFaction() != TeamB->GetFaction());
+}
+
+bool ARobotsVSEngineersGameMode::IsUnitAlive(AActor* Actor)
+{
+	auto Unit = Cast<const AUnit>(Actor);
+
+	return (Unit != nullptr) && !Unit->bIsDead;
+}
+
+bool ARobotsVSEngineersGameMode::IsUnitDead(AActor* Actor)
+{
+	auto Unit = Cast<const AUnit>(Actor);
+
+	return (Unit != nullptr) && Unit->bIsDead;
 }
