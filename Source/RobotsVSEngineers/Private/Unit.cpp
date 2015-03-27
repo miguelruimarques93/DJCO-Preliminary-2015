@@ -21,7 +21,7 @@ void AUnit::BeginPlay()
 {
 	Super::BeginPlay();
 	Health = Stats.BaseHealthPoints;
-	
+	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &AUnit::OnHit);
 }
 
 // Called every frame
@@ -85,6 +85,13 @@ void AUnit::Die(AActor* DamageCauser)
 void AUnit::PostMortem()
 {
 	SetActorHiddenInGame(true); SetLifeSpan(0.01f);
+}
+
+void AUnit::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (ARobotsVSEngineersGameMode::OnAllyFaction(OtherActor, this))
+		this->MoveIgnoreActorAdd(OtherActor);
+
 }
 
 float AUnit::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

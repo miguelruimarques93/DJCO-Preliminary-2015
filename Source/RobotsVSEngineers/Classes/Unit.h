@@ -6,6 +6,7 @@
 
 #include "FactionInterface.h"
 #include "Types.h"
+#include "RobotsVSEngineersGameMode.h"
 
 #include "Unit.generated.h"
 
@@ -55,4 +56,7 @@ public:
 	void Die(AActor* DamageCauser);
 
 	void PostMortem();
+
+	UFUNCTION(BlueprintCallable, Category = Game)
+	void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };
