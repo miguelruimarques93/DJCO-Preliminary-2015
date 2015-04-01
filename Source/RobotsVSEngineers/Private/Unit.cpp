@@ -97,3 +97,9 @@ float AUnit::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AC
 
 	return Damage;
 }
+
+void AUnit::AttackFinished()
+{
+	StopAttacking.Broadcast();
+	bIsAttacking = false;
+}

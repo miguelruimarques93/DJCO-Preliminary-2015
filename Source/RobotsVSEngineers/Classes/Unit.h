@@ -10,6 +10,8 @@
 
 #include "Unit.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FStopAttacking);
+
 UCLASS()
 class ROBOTSVSENGINEERS_API AUnit : public ACharacter, public IFactionInterface
 {
@@ -41,12 +43,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Unit)
 	UFaction Faction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
-	UAnimSequence* DeathAnimation;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
-	UAnimSequence* AttackAnimation;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Unit)
 	FPawnStats Stats;
 	
@@ -60,4 +56,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Game)
 	void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	UPROPERTY(BlueprintAssignable, Category = Unit)
+	FStopAttacking StopAttacking;
+
+	UFUNCTION(BlueprintCallable, Category = Unit)
+	void AttackFinished();
 };

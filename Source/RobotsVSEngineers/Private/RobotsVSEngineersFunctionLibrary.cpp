@@ -24,3 +24,8 @@ bool URobotsVSEngineersFunctionLibrary::IsUnitDead(AActor* Actor)
 {
 	return ARobotsVSEngineersGameMode::IsUnitDead(Actor);
 }
+
+float URobotsVSEngineersFunctionLibrary::GetAnimSequenceLength(UAnimSequence* AnimSequence)
+{
+	return AnimSequence->SequenceLength;
+}

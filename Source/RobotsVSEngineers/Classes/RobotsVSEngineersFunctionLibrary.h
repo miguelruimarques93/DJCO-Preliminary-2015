@@ -26,4 +26,7 @@ public:
 	
 	UFUNCTION(BlueprintPure, Category = Game)
 	static bool IsUnitDead(AActor* Actor);
+
+	UFUNCTION(BlueprintPure, Category = Animation)
+	static float GetAnimSequenceLength(UAnimSequence* anim);
 };
