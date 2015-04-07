@@ -33,3 +33,8 @@ void ABuilding::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 
 }
 
+UFaction ABuilding::GetFaction() const
+{
+	return Faction;
+}
+
