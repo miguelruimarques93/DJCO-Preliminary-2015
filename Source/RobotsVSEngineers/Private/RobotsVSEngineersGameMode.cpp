@@ -33,12 +33,12 @@ bool ARobotsVSEngineersGameMode::IsUnitAlive(AActor* Actor)
 {
 	auto Unit = Cast<const AUnit>(Actor);
 
-	return (Unit != nullptr) && !Unit->bIsDead;
+    return (Unit != nullptr) && (!Unit->IsPendingKill() || !Unit->bIsDead);
 }
 
 bool ARobotsVSEngineersGameMode::IsUnitDead(AActor* Actor)
 {
 	auto Unit = Cast<const AUnit>(Actor);
 
-	return (Unit != nullptr) && Unit->bIsDead;
+	return (Unit != nullptr) && (Unit->IsPendingKill() || Unit->bIsDead);
 }

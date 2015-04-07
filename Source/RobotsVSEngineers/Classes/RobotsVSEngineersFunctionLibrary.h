@@ -3,6 +3,9 @@
 #pragma once
 
 #include "Kismet/BlueprintFunctionLibrary.h"
+
+#include "Unit.h"
+
 #include "RobotsVSEngineersFunctionLibrary.generated.h"
 
 /**
@@ -29,4 +32,10 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = Animation)
 	static float GetAnimSequenceLength(UAnimSequence* anim);
+
+	UFUNCTION(BlueprintCallable, Category = Helpers)
+	static TArray<AUnit*> PushUnit(TArray<AUnit*> InArray, AUnit* unitToPush);
+
+	UFUNCTION(BlueprintPure, Category = Helpers)
+	static AUnit* TopUnit(TArray<AUnit*> array);
 };

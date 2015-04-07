@@ -62,4 +62,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Unit)
 	void AttackFinished();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
+	int32 DistanceToTarget;
 };

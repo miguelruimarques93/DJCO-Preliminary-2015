@@ -29,3 +29,14 @@ float URobotsVSEngineersFunctionLibrary::GetAnimSequenceLength(UAnimSequence* An
 {
 	return AnimSequence->SequenceLength;
 }
+
+TArray<AUnit*> URobotsVSEngineersFunctionLibrary::PushUnit(TArray<AUnit*> InArray, AUnit* unitToPush)
+{
+	InArray.HeapPush(unitToPush, [](AUnit& u1, AUnit& u2) { return u1.DistanceToTarget < u2.DistanceToTarget;  });
+	return InArray;
+}
+
+AUnit* URobotsVSEngineersFunctionLibrary::TopUnit(TArray<AUnit*> array)
+{
+	return array.Num() > 0 ? array.HeapTop() : nullptr;
+}

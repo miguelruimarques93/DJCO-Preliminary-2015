@@ -14,6 +14,8 @@ AUnit::AUnit()
 
 	bIsDead = false;
 	bIsAttacking = false;
+
+	DistanceToTarget = INT32_MAX;
 }
 
 // Called when the game starts or when spawned
