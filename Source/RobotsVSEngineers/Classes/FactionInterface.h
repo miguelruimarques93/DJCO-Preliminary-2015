@@ -12,6 +12,7 @@ enum class UFaction : uint8
 namespace Factions
 {
 	CONSTEXPR const auto NumberOfFactions = 2;
+	UFaction GetEnemyFaction(UFaction Faction);
 }
 
 UINTERFACE()

@@ -15,30 +15,41 @@ ARvEGameState::ARvEGameState(const class FObjectInitializer& ObjectInitializer)
 	PlayersData.AddZeroed(Factions::NumberOfFactions);
 }
 
-void ARvEGameState::OnCharDied(class AUnit* KilledChar, class AUnit* KillerChar)
+void ARvEGameState::OnCharDied(const class AUnit* KilledChar, const class IFactionInterface* Killer)
 {
 	auto killedFactionIndex = static_cast<std::underlying_type_t<UFaction>>(KilledChar->GetFaction());
-	auto killerFactionIndex = static_cast<std::underlying_type_t<UFaction>>(KillerChar->GetFaction());
+	auto killerFactionIndex = static_cast<std::underlying_type_t<UFaction>>(Killer->GetFaction());
 
 	PlayersData[killedFactionIndex].UnitsLost++;
 	PlayersData[killerFactionIndex].UnitsKilled++;
 }
 
-void ARvEGameState::OnCharSpawned(class AUnit* InChar)
+void ARvEGameState::OnCharSpawned(const class AUnit* InChar)
 {
 	auto factionIndex = static_cast<std::underlying_type_t<UFaction>>(InChar->GetFaction());
 
 	PlayersData[factionIndex].UnitsSpawned++;
 }
 
-void ARvEGameState::OnActorDamaged(class AActor* InActor, float Damage, class AController* EventInstigator)
+void ARvEGameState::OnActorDamaged(const class IFactionInterface* DamagedActor, float Damage, const class IFactionInterface* DamageCauser)
 {
-	//TODO
+	auto DamageCauserFaction = DamageCauser->GetFaction();
+	auto DamageCauserFactionIndex = static_cast<std::underlying_type_t<UFaction>>(DamageCauserFaction);
+
+	PlayersData[DamageCauserFactionIndex].DamageDone += Damage;
+
 }
 
-FPlayerData* ARvEGameState::GetPlayerData(UFaction faction) const
+FPlayerData ARvEGameState::GetPlayerData(UFaction faction) const
 {
 	auto factionIndex = static_cast<std::underlying_type_t<UFaction>>(faction);
 
-	return &PlayersData[factionIndex];
+	return PlayersData[factionIndex];
+}
+
+void ARvEGameState::SetFactionHeadquarter(ABuilding* Headquarter)
+{
+	auto Faction = Headquarter->GetFaction();
+	auto FactionIndex = static_cast<std::underlying_type_t<UFaction>>(Faction);
+	PlayersData[FactionIndex].Headquarter = Headquarter;
 }

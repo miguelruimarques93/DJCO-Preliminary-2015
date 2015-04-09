@@ -30,12 +30,18 @@ public:
 	UFUNCTION(BlueprintPure, Category = Game)
 	static bool IsUnitDead(AActor* Actor);
 
+	UFUNCTION(BlueprintPure, Category = Game)
+	static AActor* GetUnitDestination(const AUnit* InUnit);
+
 	UFUNCTION(BlueprintPure, Category = Animation)
 	static float GetAnimSequenceLength(UAnimSequence* anim);
+
+	UFUNCTION(BlueprintCallable, Category = Game)
+	static AUnit* SpawnUnit(AActor* Instigator, UClass* UnitClassToSpawn, FVector Location);
 
 	UFUNCTION(BlueprintCallable, Category = Helpers)
 	static TArray<AUnit*> PushUnit(TArray<AUnit*> InArray, AUnit* unitToPush);
 
-	UFUNCTION(BlueprintPure, Category = Helpers)
+	UFUNCTION(BlueprintCallable, Category = Helpers)
 	static AUnit* TopUnit(TArray<AUnit*> array);
 };

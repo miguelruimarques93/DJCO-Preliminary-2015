@@ -4,6 +4,9 @@
 #include "RobotsVSEngineersFunctionLibrary.h"
 
 #include "RobotsVSEngineersGameMode.h"
+#include "Unit.h"
+#include "RvEGameState.h"
+
 
 bool URobotsVSEngineersFunctionLibrary::AreAllies(AActor* Actor1, AActor* Actor2)
 {
@@ -25,9 +28,37 @@ bool URobotsVSEngineersFunctionLibrary::IsUnitDead(AActor* Actor)
 	return ARobotsVSEngineersGameMode::IsUnitDead(Actor);
 }
 
+AActor* URobotsVSEngineersFunctionLibrary::GetUnitDestination(const AUnit* InUnit)
+{
+	auto GameState = InUnit->GetWorld()->GetGameState<ARvEGameState>();
+	if (GameState)
+	{
+		return GameState->GetPlayerData(Factions::GetEnemyFaction(InUnit->GetFaction())).Headquarter;
+	}
+
+	return nullptr;
+}
+
 float URobotsVSEngineersFunctionLibrary::GetAnimSequenceLength(UAnimSequence* AnimSequence)
 {
 	return AnimSequence->SequenceLength;
+}
+
+AUnit* URobotsVSEngineersFunctionLibrary::SpawnUnit(AActor* Instigator, UClass* UnitClassToSpawn, FVector Location)
+{
+	auto SpawnedUnit = Instigator->GetWorld()->SpawnActor<AUnit>(UnitClassToSpawn, Location, Instigator->GetActorRotation());
+
+	if (!SpawnedUnit)
+		return nullptr;
+
+	auto GameState = Instigator->GetWorld()->GetGameState<ARvEGameState>();
+	if (GameState)
+	{
+		GameState->OnCharSpawned(SpawnedUnit);
+	}
+	
+	return SpawnedUnit;
+
 }
 
 TArray<AUnit*> URobotsVSEngineersFunctionLibrary::PushUnit(TArray<AUnit*> InArray, AUnit* unitToPush)

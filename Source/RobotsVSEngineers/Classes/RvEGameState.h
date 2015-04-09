@@ -5,24 +5,39 @@
 #include "GameFramework/GameState.h"
 #include "Optional.h"
 #include "FactionInterface.h"
+#include "Building.h"
+
+
 #include "RvEGameState.generated.h"
 
+USTRUCT(BlueprintType)
 struct FPlayerData
 {
+	GENERATED_USTRUCT_BODY()
+
 	/** current resources */
-	uint32 ResourcesAvailable;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Data)
+	int32 ResourcesAvailable;
 
 	/** total resources gathered */
-	uint32 ResourcesGathered;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Data)
+	int32 ResourcesGathered;
 
 	/** total damage done */
-	uint32 DamageDone;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Data)
+	float DamageDone;
 
-	uint32 UnitsKilled;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Data)
+	int32 UnitsKilled;
 
-	uint32 UnitsLost;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Data)
+	int32 UnitsLost;
 
-	uint32 UnitsSpawned;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Data)
+	int32 UnitsSpawned;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Data)
+	ABuilding* Headquarter;
 
 };
 
@@ -49,14 +64,14 @@ public:
 	*
 	* @param	InChar	The character that has died.
 	*/
-	void OnCharDied(class AUnit* KilledChar, class AUnit* KillerChar);
+	void OnCharDied(const class AUnit* KilledChar, const class IFactionInterface* Killer);
 
 	/**
 	* Notification that a character has spawned.
 	*
 	* @param	InChar	The character that has died.
 	*/
-	void OnCharSpawned(class AUnit* InChar);
+	void OnCharSpawned(const class AUnit* InChar);
 
 	/**
 	* Notification that an actor was damaged.
@@ -65,7 +80,7 @@ public:
 	* @param	Damage	The amount of damage inflicted.
 	* @param	InChar	The controller that inflicted the damage.
 	*/
-	void OnActorDamaged(class AActor* InActor, float Damage, class AController* EventInstigator);
+	void OnActorDamaged(const class IFactionInterface* DamagedActor, float Damage, const class IFactionInterface* DamageCauser);
 
 	/**
 	* Get a team's data.
@@ -73,7 +88,11 @@ public:
 	* @param	TeamNum	The team to get the data for
 	* @returns FPlayerData pointer to the data for requested team.
 	*/
-	FPlayerData* GetPlayerData(UFaction faction) const;
+	UFUNCTION(BlueprintPure, Category = Player)
+	FPlayerData GetPlayerData(UFaction faction) const;
+
+	UFUNCTION(BlueprintCallable, Category = Game)
+	void SetFactionHeadquarter(ABuilding* Headquarter);
 
 
 	

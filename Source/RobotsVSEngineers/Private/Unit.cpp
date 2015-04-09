@@ -2,6 +2,7 @@
 
 #include "RobotsVSEngineers.h"
 #include "Unit.h"
+#include "RvEGameState.h"
 
 
 // Sets default values
@@ -69,6 +70,18 @@ void AUnit::Die(AActor* DamageCauser)
 	{
 		Controller->UnPossess();
 	}
+
+	auto Killer = Cast<const IFactionInterface>(DamageCauser);
+	auto GameState = GetWorld()->GetGameState<ARvEGameState>();
+	if (Killer && GameState) 
+	{
+		GameState->OnCharDied(this, Killer);
+	}
+	else if (!Killer)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Unit killed but killer is no longer available."));
+	}
+
 }
 
 void AUnit::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -88,6 +101,13 @@ float AUnit::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AC
 
 	if (Damage > 0.f) {
 		Health -= Damage;
+
+		auto Causer = Cast<const IFactionInterface>(DamageCauser);
+		auto GameState = GetWorld()->GetGameState<ARvEGameState>();
+		if (Causer && GameState)
+		{
+			GameState->OnActorDamaged(this, Damage, Causer);
+		}
 
 		if (Health <= 0.f) {
 			/* TODO die*/
