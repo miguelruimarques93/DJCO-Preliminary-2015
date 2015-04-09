@@ -32,6 +32,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
+	virtual void GenerateResources();
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Resources)
+	int32 ResourcesGeneratedPerTimeUnit;
+
+private:
+
+	float TimeToGenerateResources;
 };

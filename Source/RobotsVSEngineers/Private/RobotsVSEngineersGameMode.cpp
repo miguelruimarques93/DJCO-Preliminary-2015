@@ -9,6 +9,8 @@
 
 #include "FactionInterface.h"
 
+CONSTEXPR const float ARobotsVSEngineersGameMode::SecondsPerTurn = 10.0;
+
 ARobotsVSEngineersGameMode::ARobotsVSEngineersGameMode(const class FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {

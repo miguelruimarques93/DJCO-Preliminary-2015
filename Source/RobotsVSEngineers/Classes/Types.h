@@ -30,6 +30,9 @@ struct FPawnStats
 	int32 SpawnTime;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Data)
+	int32 Cost;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Data)
 	UType AttackType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Data)
@@ -42,6 +45,7 @@ struct FPawnStats
 		AttackRange = 75;
 		AttackSpeed = 2000;
 		SpawnTime = 2;
+		Cost = 2;
 
 		AttackType = UType::Physical;
 	}

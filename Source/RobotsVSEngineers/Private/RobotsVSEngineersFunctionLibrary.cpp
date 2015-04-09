@@ -44,21 +44,15 @@ float URobotsVSEngineersFunctionLibrary::GetAnimSequenceLength(UAnimSequence* An
 	return AnimSequence->SequenceLength;
 }
 
-AUnit* URobotsVSEngineersFunctionLibrary::SpawnUnit(AActor* Instigator, UClass* UnitClassToSpawn, FVector Location)
+AUnit* URobotsVSEngineersFunctionLibrary::SpawnUnit(const ABuilding* Instigator, UClass* UnitClassToSpawn, FVector Location)
 {
-	auto SpawnedUnit = Instigator->GetWorld()->SpawnActor<AUnit>(UnitClassToSpawn, Location, Instigator->GetActorRotation());
-
-	if (!SpawnedUnit)
-		return nullptr;
-
 	auto GameState = Instigator->GetWorld()->GetGameState<ARvEGameState>();
 	if (GameState)
 	{
-		GameState->OnCharSpawned(SpawnedUnit);
+		return GameState->SpawnActor(Instigator, UnitClassToSpawn, Location);
 	}
-	
-	return SpawnedUnit;
 
+	return nullptr;
 }
 
 TArray<AUnit*> URobotsVSEngineersFunctionLibrary::PushUnit(TArray<AUnit*> InArray, AUnit* unitToPush)

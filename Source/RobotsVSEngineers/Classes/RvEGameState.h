@@ -91,9 +91,23 @@ public:
 	UFUNCTION(BlueprintPure, Category = Player)
 	FPlayerData GetPlayerData(UFaction faction) const;
 
+	/**
+	 * Set a faction's Headquarter
+	 *
+	 * @param Headquarter The Building that is going to be a headquarter.
+	 */
 	UFUNCTION(BlueprintCallable, Category = Game)
 	void SetFactionHeadquarter(ABuilding* Headquarter);
 
 
-	
+	/**
+	 * Add Resources to a Faction
+	 * 
+	 * @param Building The Building that generated the resources.
+	 * @param Resources The amount of resources generated.
+	 */
+	UFUNCTION(BlueprintCallable, Category = Player)
+	void AddResources(const ABuilding* Building, uint32 Resources);	
+
+	AUnit* SpawnActor(UClass* UnitClassToSpawn, FVector Location);
 };

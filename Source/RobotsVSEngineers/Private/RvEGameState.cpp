@@ -27,7 +27,6 @@ void ARvEGameState::OnCharDied(const class AUnit* KilledChar, const class IFacti
 void ARvEGameState::OnCharSpawned(const class AUnit* InChar)
 {
 	auto factionIndex = static_cast<std::underlying_type_t<UFaction>>(InChar->GetFaction());
-
 	PlayersData[factionIndex].UnitsSpawned++;
 }
 
@@ -52,4 +51,37 @@ void ARvEGameState::SetFactionHeadquarter(ABuilding* Headquarter)
 	auto Faction = Headquarter->GetFaction();
 	auto FactionIndex = static_cast<std::underlying_type_t<UFaction>>(Faction);
 	PlayersData[FactionIndex].Headquarter = Headquarter;
+}
+
+void ARvEGameState::AddResources(const ABuilding* Building, uint32 Resources)
+{
+	auto Faction = Building->GetFaction();
+	auto FactionIndex = static_cast<std::underlying_type_t<UFaction>>(Faction);
+	PlayersData[FactionIndex].ResourcesAvailable += Resources;
+	PlayersData[FactionIndex].ResourcesGathered += Resources;
+}
+
+AUnit* ARvEGameState::SpawnActor(UClass* UnitClassToSpawn, FVector Location)
+{
+	auto DefaultUnit = Cast<AUnit>(UnitClassToSpawn->GetDefaultObject());
+	auto UnitCost = DefaultUnit->Stats.Cost;
+	auto Faction = DefaultUnit->GetFaction();
+	auto FactionIndex = static_cast<std::underlying_type_t<UFaction>>(Faction);
+
+	if (PlayersData[FactionIndex].ResourcesAvailable >= UnitCost) 
+	{
+		PlayersData[FactionIndex].ResourcesAvailable -= UnitCost;
+
+		auto SpawnedUnit = GetWorld()->SpawnActor<AUnit>(UnitClassToSpawn, Location, Instigator->GetActorRotation());
+
+		if (!SpawnedUnit)
+			return nullptr;
+
+		OnCharSpawned(SpawnedUnit);
+
+		return SpawnedUnit;
+	}
+	
+	return nullptr;
+	
 }

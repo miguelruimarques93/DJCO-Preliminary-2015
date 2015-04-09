@@ -4,6 +4,7 @@
 
 #include "Kismet/BlueprintFunctionLibrary.h"
 
+#include "Building.h"
 #include "Unit.h"
 
 #include "RobotsVSEngineersFunctionLibrary.generated.h"
@@ -37,7 +38,7 @@ public:
 	static float GetAnimSequenceLength(UAnimSequence* anim);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
-	static AUnit* SpawnUnit(AActor* Instigator, UClass* UnitClassToSpawn, FVector Location);
+	static AUnit* SpawnUnit(const ABuilding* Instigator, UClass* UnitClassToSpawn, FVector Location);
 
 	UFUNCTION(BlueprintCallable, Category = Helpers)
 	static TArray<AUnit*> PushUnit(TArray<AUnit*> InArray, AUnit* unitToPush);
