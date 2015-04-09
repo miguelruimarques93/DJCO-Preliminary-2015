@@ -5,12 +5,15 @@
 #include "Mouse_PlayerController.h"
 #include "Unit.h"
 
+#include "RvEGameState.h"
+
 #include "FactionInterface.h"
 
 ARobotsVSEngineersGameMode::ARobotsVSEngineersGameMode(const class FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	this->PlayerControllerClass = AMouse_PlayerController::StaticClass();
+	GameStateClass = ARvEGameState::StaticClass();
 }
 
 bool ARobotsVSEngineersGameMode::OnAllyFaction(const AActor* ActorA, const AActor* ActorB)

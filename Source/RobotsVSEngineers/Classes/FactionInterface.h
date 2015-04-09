@@ -9,6 +9,11 @@ enum class UFaction : uint8
 	Robots
 };
 
+namespace Factions
+{
+	CONSTEXPR const auto NumberOfFactions = 2;
+}
+
 UINTERFACE()
 class UFactionInterface : public UInterface
 {
