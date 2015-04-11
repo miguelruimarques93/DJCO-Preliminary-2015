@@ -6,6 +6,7 @@
 
 #include "Building.h"
 #include "Unit.h"
+#include "RvEGameState.h"
 
 #include "RobotsVSEngineersFunctionLibrary.generated.h"
 
@@ -38,10 +39,10 @@ public:
 	static float GetAnimSequenceLength(UAnimSequence* anim);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
-	static AUnit* SpawnUnit(const ABuilding* Instigator, UClass* UnitClassToSpawn, FVector Location);
+	static void SpawnUnit(const ABuilding* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
-	static ABuilding* SpawnBuilding(const ABuilding* Instigator, UClass* BuildingClassToSpawn, FVector Location);
+	static void SpawnBuilding(const ABuilding* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned);
 
 	UFUNCTION(BlueprintCallable, Category = Helpers)
 	static TArray<AUnit*> PushUnit(TArray<AUnit*> InArray, AUnit* unitToPush);

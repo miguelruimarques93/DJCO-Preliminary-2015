@@ -62,58 +62,62 @@ void ARvEGameState::AddResources(const ABuilding* Building, uint32 Resources)
 	PlayersData[FactionIndex].ResourcesGathered += Resources;
 }
 
-AUnit* ARvEGameState::SpawnActor(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location)
+void ARvEGameState::SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned)
 {
 	if (!UnitClassToSpawn)
 	{
 		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Unit class in '%s'."), *Instigator->GetName());
-		return nullptr;
+		return;
 	}
 
 	auto DefaultUnit = Cast<AUnit>(UnitClassToSpawn->GetDefaultObject());
-	
+
 	if (!DefaultUnit)
 	{
 		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Unit class in '%s'."), *Instigator->GetName());
-		return nullptr;
+		return;
 	}
 
 	auto UnitCost = DefaultUnit->Stats.Cost;
 	auto Faction = DefaultUnit->GetFaction();
 	auto FactionIndex = static_cast<std::underlying_type_t<UFaction>>(Faction);
 
-	if (PlayersData[FactionIndex].ResourcesAvailable >= UnitCost) 
+	if (PlayersData[FactionIndex].ResourcesAvailable >= UnitCost)
 	{
 		PlayersData[FactionIndex].ResourcesAvailable -= UnitCost;
 
-		auto SpawnedUnit = GetWorld()->SpawnActor<AUnit>(UnitClassToSpawn, Location, Instigator->GetActorRotation());
+		FTimerHandle TimerHandle;
 
-		if (!SpawnedUnit)
-			return nullptr;
+		FTimerDelegate TimerDelegate;
+		TimerDelegate.BindLambda([this, UnitClassToSpawn, Location, Instigator, UnitSpawned](){
+			auto SpawnedUnit = GetWorld()->SpawnActor<AUnit>(UnitClassToSpawn, Location, Instigator->GetActorRotation());
 
-		OnCharSpawned(SpawnedUnit);
+			if (SpawnedUnit) {
+				OnCharSpawned(SpawnedUnit);
+				UnitSpawned.ExecuteIfBound(SpawnedUnit);
+			}
+		});
 
-		return SpawnedUnit;
+		GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, DefaultUnit->Stats.SpawnTime / 1000.0f, false);
 	}
-	
-	return nullptr;
-	
+
+
 }
 
-ABuilding* ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location)
+void ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned)
 {
 	if (!BuildingClassToSpawn)
 	{
 		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Building class in '%s'."), *Instigator->GetName());
-		return nullptr;
+		return;
 	}
 
 	auto DefaultBuilding = Cast<ABuilding>(BuildingClassToSpawn->GetDefaultObject());
-	
+
 	if (!DefaultBuilding)
 	{
 		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Building class in '%s'."), *Instigator->GetName());
-		return nullptr;
+		return;
 	}
 
 	auto BuildingCost = DefaultBuilding->Stats.Cost;
@@ -124,23 +128,30 @@ ABuilding* ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* Buildi
 	{
 		PlayersData[FactionIndex].ResourcesAvailable -= BuildingCost;
 
-		auto SpawnedBuilding = GetWorld()->SpawnActor<ABuilding>(BuildingClassToSpawn, Location, Instigator->GetActorRotation());
+		FTimerHandle TimerHandle;
 
-		if (!SpawnedBuilding)
-			return nullptr;
+		FTimerDelegate TimerDelegate;
+		TimerDelegate.BindLambda([this, BuildingClassToSpawn, Location, Instigator, BuildingSpawned](){
+			auto SpawnedBuilding = GetWorld()->SpawnActor<ABuilding>(BuildingClassToSpawn, Location, Instigator->GetActorRotation());
 
-		// OnBuildingSpawned(SpawnedBuilding);
+			if (SpawnedBuilding)
+			{
+				// OnBuildingSpawned(SpawnedBuilding);
 
-		return SpawnedBuilding;
+				BuildingSpawned.ExecuteIfBound(SpawnedBuilding);
+			}
+
+			
+		});
+
+		GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, DefaultBuilding->Stats.SpawnTime / 1000.0f, false);
 	}
-
-	return nullptr;
 }
 
 void ARvEGameState::BeginPlay()
 {
 	UE_LOG(LogTemp, Display, TEXT("PlayersData.Num() = %d"), PlayersData.Num());
-	
+
 	for (auto& PlayerData : PlayersData)
 	{
 		PlayerData.ResourcesAvailable += ARobotsVSEngineersGameMode::InitialResources;

@@ -5,7 +5,6 @@
 
 #include "RobotsVSEngineersGameMode.h"
 #include "Unit.h"
-#include "RvEGameState.h"
 
 
 bool URobotsVSEngineersFunctionLibrary::AreAllies(AActor* Actor1, AActor* Actor2)
@@ -44,17 +43,18 @@ float URobotsVSEngineersFunctionLibrary::GetAnimSequenceLength(UAnimSequence* An
 	return AnimSequence->SequenceLength;
 }
 
-AUnit* URobotsVSEngineersFunctionLibrary::SpawnUnit(const ABuilding* Instigator, UClass* UnitClassToSpawn, FVector Location)
+void URobotsVSEngineersFunctionLibrary::SpawnUnit(const ABuilding* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned)
 {
 	auto GameState = Instigator->GetWorld()->GetGameState<ARvEGameState>();
-	return GameState ? GameState->SpawnActor(Instigator, UnitClassToSpawn, Location) : nullptr;
-
+	if (GameState) 
+		GameState->SpawnUnit(Instigator, UnitClassToSpawn, Location, UnitSpawned);
 }
 
-ABuilding* URobotsVSEngineersFunctionLibrary::SpawnBuilding(const ABuilding* Instigator, UClass* BuildingClassToSpawn, FVector Location)
+void URobotsVSEngineersFunctionLibrary::SpawnBuilding(const ABuilding* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned)
 {
 	auto GameState = Instigator->GetWorld()->GetGameState<ARvEGameState>();
-	return GameState ? GameState->SpawnBuilding(Instigator, BuildingClassToSpawn, Location) : nullptr;
+	if (GameState)
+		GameState->SpawnBuilding(Instigator, BuildingClassToSpawn, Location, BuildingSpawned);
 }
 
 TArray<AUnit*> URobotsVSEngineersFunctionLibrary::PushUnit(TArray<AUnit*> InArray, AUnit* unitToPush)

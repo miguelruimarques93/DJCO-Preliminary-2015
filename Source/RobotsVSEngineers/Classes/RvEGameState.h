@@ -6,9 +6,12 @@
 #include "Optional.h"
 #include "FactionInterface.h"
 #include "Building.h"
-
+#include "Unit.h"
 
 #include "RvEGameState.generated.h"
+
+DECLARE_DYNAMIC_DELEGATE_OneParam(FUnitSpawned, AUnit*, Unit);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FBuildingSpawned, ABuilding*, Building);
 
 USTRUCT(BlueprintType)
 struct FPlayerData
@@ -109,9 +112,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Player)
 	void AddResources(const ABuilding* Building, uint32 Resources);	
 
-	AUnit* SpawnActor(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location);
+	void SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned);
 
-	ABuilding* SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location);
+	void SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned);
 
 	virtual void BeginPlay() override;
 
