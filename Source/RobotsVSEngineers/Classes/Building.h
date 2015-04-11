@@ -17,6 +17,10 @@ public:
 	// Sets default values for this pawn's properties
 	ABuilding();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	int32 Health;
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
 	UFaction Faction;
 
@@ -34,6 +38,13 @@ public:
 
 	virtual void GenerateResources();
 	
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	void Die(AActor* DamageCauser);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Unit)
+	uint8 bIsDead : 1;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Building)
 	FPawnStats Stats;
 
