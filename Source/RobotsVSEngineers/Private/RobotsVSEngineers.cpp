@@ -3,3 +3,5 @@
 #include "RobotsVSEngineers.h"
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, RobotsVSEngineers, "RobotsVSEngineers" );
+
+DEFINE_LOG_CATEGORY(RveDevelopmentError);

@@ -112,4 +112,7 @@ public:
 	AUnit* SpawnActor(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location);
 
 	ABuilding* SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location);
+
+	virtual void BeginPlay() override;
+
 };

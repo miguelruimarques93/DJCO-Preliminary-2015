@@ -2,6 +2,7 @@
 
 #include "RobotsVSEngineers.h"
 #include "RvEGameState.h"
+#include "RobotsVSEngineersGameMode.h"
 
 #include "Unit.h"
 
@@ -63,7 +64,20 @@ void ARvEGameState::AddResources(const ABuilding* Building, uint32 Resources)
 
 AUnit* ARvEGameState::SpawnActor(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location)
 {
+	if (!UnitClassToSpawn)
+	{
+		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Unit class in '%s'."), *Instigator->GetName());
+		return nullptr;
+	}
+
 	auto DefaultUnit = Cast<AUnit>(UnitClassToSpawn->GetDefaultObject());
+	
+	if (!DefaultUnit)
+	{
+		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Unit class in '%s'."), *Instigator->GetName());
+		return nullptr;
+	}
+
 	auto UnitCost = DefaultUnit->Stats.Cost;
 	auto Faction = DefaultUnit->GetFaction();
 	auto FactionIndex = static_cast<std::underlying_type_t<UFaction>>(Faction);
@@ -88,7 +102,20 @@ AUnit* ARvEGameState::SpawnActor(const AActor* Instigator, UClass* UnitClassToSp
 
 ABuilding* ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location)
 {
+	if (!BuildingClassToSpawn)
+	{
+		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Building class in '%s'."), *Instigator->GetName());
+		return nullptr;
+	}
+
 	auto DefaultBuilding = Cast<ABuilding>(BuildingClassToSpawn->GetDefaultObject());
+	
+	if (!DefaultBuilding)
+	{
+		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Building class in '%s'."), *Instigator->GetName());
+		return nullptr;
+	}
+
 	auto BuildingCost = DefaultBuilding->Stats.Cost;
 	auto Faction = DefaultBuilding->GetFaction();
 	auto FactionIndex = static_cast<std::underlying_type_t<UFaction>>(Faction);
@@ -108,4 +135,15 @@ ABuilding* ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* Buildi
 	}
 
 	return nullptr;
+}
+
+void ARvEGameState::BeginPlay()
+{
+	UE_LOG(LogTemp, Display, TEXT("PlayersData.Num() = %d"), PlayersData.Num());
+	
+	for (auto& PlayerData : PlayersData)
+	{
+		PlayerData.ResourcesAvailable += ARobotsVSEngineersGameMode::InitialResources;
+		PlayerData.ResourcesGathered += ARobotsVSEngineersGameMode::InitialResources;
+	}
 }
