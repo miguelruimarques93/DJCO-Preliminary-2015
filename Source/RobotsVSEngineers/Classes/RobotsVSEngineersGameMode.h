@@ -25,4 +25,6 @@ public:
 	static bool IsUnitDead(AActor* Actor);
 
 	static CONSTEXPR const float SecondsPerTurn;
+	
+	static CONSTEXPR const int32 InitialResources;
 };

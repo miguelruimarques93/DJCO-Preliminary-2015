@@ -11,6 +11,8 @@
 
 CONSTEXPR const float ARobotsVSEngineersGameMode::SecondsPerTurn = 10.0;
 
+CONSTEXPR const int32 ARobotsVSEngineersGameMode::InitialResources = 100;
+
 ARobotsVSEngineersGameMode::ARobotsVSEngineersGameMode(const class FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
