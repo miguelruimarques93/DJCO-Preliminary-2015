@@ -4,7 +4,7 @@
 
 #include "GameFramework/Pawn.h"
 #include "FactionInterface.h"
-
+#include "Types.h"
 
 #include "Building.generated.h"
 
@@ -34,6 +34,9 @@ public:
 
 	virtual void GenerateResources();
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Building)
+	FPawnStats Stats;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Resources)
 	int32 ResourcesGeneratedPerTimeUnit;
 

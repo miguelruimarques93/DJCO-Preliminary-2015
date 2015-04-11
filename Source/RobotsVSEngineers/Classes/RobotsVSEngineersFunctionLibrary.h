@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Game)
 	static AUnit* SpawnUnit(const ABuilding* Instigator, UClass* UnitClassToSpawn, FVector Location);
 
+	UFUNCTION(BlueprintCallable, Category = Game)
+	static ABuilding* SpawnBuilding(const ABuilding* Instigator, UClass* BuildingClassToSpawn, FVector Location);
+
 	UFUNCTION(BlueprintCallable, Category = Helpers)
 	static TArray<AUnit*> PushUnit(TArray<AUnit*> InArray, AUnit* unitToPush);
 

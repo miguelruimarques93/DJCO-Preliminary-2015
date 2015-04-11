@@ -61,7 +61,7 @@ void ARvEGameState::AddResources(const ABuilding* Building, uint32 Resources)
 	PlayersData[FactionIndex].ResourcesGathered += Resources;
 }
 
-AUnit* ARvEGameState::SpawnActor(UClass* UnitClassToSpawn, FVector Location)
+AUnit* ARvEGameState::SpawnActor(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location)
 {
 	auto DefaultUnit = Cast<AUnit>(UnitClassToSpawn->GetDefaultObject());
 	auto UnitCost = DefaultUnit->Stats.Cost;
@@ -84,4 +84,28 @@ AUnit* ARvEGameState::SpawnActor(UClass* UnitClassToSpawn, FVector Location)
 	
 	return nullptr;
 	
+}
+
+ABuilding* ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location)
+{
+	auto DefaultBuilding = Cast<ABuilding>(BuildingClassToSpawn->GetDefaultObject());
+	auto BuildingCost = DefaultBuilding->Stats.Cost;
+	auto Faction = DefaultBuilding->GetFaction();
+	auto FactionIndex = static_cast<std::underlying_type_t<UFaction>>(Faction);
+
+	if (PlayersData[FactionIndex].ResourcesAvailable >= BuildingCost)
+	{
+		PlayersData[FactionIndex].ResourcesAvailable -= BuildingCost;
+
+		auto SpawnedBuilding = GetWorld()->SpawnActor<ABuilding>(BuildingClassToSpawn, Location, Instigator->GetActorRotation());
+
+		if (!SpawnedBuilding)
+			return nullptr;
+
+		// OnBuildingSpawned(SpawnedBuilding);
+
+		return SpawnedBuilding;
+	}
+
+	return nullptr;
 }

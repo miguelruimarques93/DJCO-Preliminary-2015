@@ -3,7 +3,7 @@
 #include "RobotsVSEngineers.h"
 #include "Unit.h"
 #include "RvEGameState.h"
-
+#include "RobotsVSEngineersGameMode.h"
 
 // Sets default values
 AUnit::AUnit()
@@ -28,9 +28,9 @@ void AUnit::BeginPlay()
 }
 
 // Called every frame
-void AUnit::Tick( float DeltaTime )
+void AUnit::Tick(float DeltaTime)
 {
-	Super::Tick( DeltaTime );
+	Super::Tick(DeltaTime);
 
 }
 
@@ -66,14 +66,14 @@ void AUnit::Die(AActor* DamageCauser)
 	}
 
 	// detach the controller
-	if (Controller != NULL)
+	if (Controller != nullptr)
 	{
 		Controller->UnPossess();
 	}
 
 	auto Killer = Cast<const IFactionInterface>(DamageCauser);
 	auto GameState = GetWorld()->GetGameState<ARvEGameState>();
-	if (Killer && GameState) 
+	if (Killer && GameState)
 	{
 		GameState->OnCharDied(this, Killer);
 	}
@@ -84,14 +84,14 @@ void AUnit::Die(AActor* DamageCauser)
 
 }
 
-void AUnit::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void AUnit::OnHit(AActor* OtherActor, UPrimitiveComponent*, FVector, const FHitResult&)
 {
 	if (ARobotsVSEngineersGameMode::OnAllyFaction(OtherActor, this))
 		this->MoveIgnoreActorAdd(OtherActor);
 
 }
 
-float AUnit::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+float AUnit::TakeDamage(float Damage, struct FDamageEvent const&, AController*, AActor* DamageCauser)
 {
 	if (Health <= 0) {
 		return 0.f;

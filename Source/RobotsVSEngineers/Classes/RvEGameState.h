@@ -109,5 +109,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Player)
 	void AddResources(const ABuilding* Building, uint32 Resources);	
 
-	AUnit* SpawnActor(UClass* UnitClassToSpawn, FVector Location);
+	AUnit* SpawnActor(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location);
+
+	ABuilding* SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location);
 };
