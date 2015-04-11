@@ -6,7 +6,6 @@
 
 #include "FactionInterface.h"
 #include "Types.h"
-#include "RobotsVSEngineersGameMode.h"
 
 #include "Unit.generated.h"
 
