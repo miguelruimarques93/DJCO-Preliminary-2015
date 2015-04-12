@@ -90,12 +90,17 @@ bool ARvEGameState::SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn
 
 		FTimerDelegate TimerDelegate;
 		TimerDelegate.BindLambda([this, UnitClassToSpawn, Location, Instigator, UnitSpawned](){
-			auto SpawnedUnit = GetWorld()->SpawnActor<AUnit>(UnitClassToSpawn, Location, Instigator->GetActorRotation());
+			FActorSpawnParameters ActorSpawnParameters;
+			ActorSpawnParameters.bNoCollisionFail = true;
+
+			auto SpawnedUnit = GetWorld()->SpawnActor<AUnit>(UnitClassToSpawn, Location, Instigator->GetActorRotation(), ActorSpawnParameters);
 
 			if (SpawnedUnit) {
 				OnCharSpawned(SpawnedUnit);
 				UnitSpawned.ExecuteIfBound(SpawnedUnit);
 			}
+			else
+				UnitSpawned.ExecuteIfBound(nullptr);
 		});
 
 		GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, DefaultUnit->Stats.SpawnTime / 1000.0f, false);
@@ -142,8 +147,8 @@ bool ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* BuildingClas
 
 				BuildingSpawned.ExecuteIfBound(SpawnedBuilding);
 			}
-
-			
+			else
+				BuildingSpawned.ExecuteIfBound(nullptr);
 		});
 
 		GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, DefaultBuilding->Stats.SpawnTime / 1000.0f, false);

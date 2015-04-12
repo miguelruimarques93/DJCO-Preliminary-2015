@@ -113,3 +113,12 @@ UFaction ABuilding::GetFaction() const
 	return Faction;
 }
 
+void ABuilding::OnSelectionGained_Implementation()
+{
+	
+}
+
+void ABuilding::OnSelectionLost_Implementation()
+{
+
+}

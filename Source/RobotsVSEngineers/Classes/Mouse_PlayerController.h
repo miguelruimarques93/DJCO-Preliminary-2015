@@ -3,6 +3,8 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+#include "Building.h"
+
 #include "Mouse_PlayerController.generated.h"
 
 /**
@@ -14,4 +16,17 @@ class ROBOTSVSENGINEERS_API AMouse_PlayerController : public APlayerController
 	GENERATED_BODY()
 
 	AMouse_PlayerController(const class FObjectInitializer&);
+
+	ABuilding* GetBuildingAtCursor();
+
+	void SetSelected(ABuilding* NewBuilding);
+
+	UFUNCTION()
+	void OnClick();
+
+	virtual void SetupInputComponent();
+
+
+
+	ABuilding* SelectedBuilding;
 };
