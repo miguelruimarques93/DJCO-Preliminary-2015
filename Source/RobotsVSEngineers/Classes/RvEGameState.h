@@ -112,9 +112,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Player)
 	void AddResources(const ABuilding* Building, uint32 Resources);	
 
-	void SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned);
+	bool SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned);
 
-	void SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned);
+	bool SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned);
 
 	virtual void BeginPlay() override;
 

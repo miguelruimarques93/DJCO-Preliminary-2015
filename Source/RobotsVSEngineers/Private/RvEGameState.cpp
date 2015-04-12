@@ -62,12 +62,12 @@ void ARvEGameState::AddResources(const ABuilding* Building, uint32 Resources)
 	PlayersData[FactionIndex].ResourcesGathered += Resources;
 }
 
-void ARvEGameState::SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned)
+bool ARvEGameState::SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned)
 {
 	if (!UnitClassToSpawn)
 	{
 		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Unit class in '%s'."), *Instigator->GetName());
-		return;
+		return false;
 	}
 
 	auto DefaultUnit = Cast<AUnit>(UnitClassToSpawn->GetDefaultObject());
@@ -75,7 +75,7 @@ void ARvEGameState::SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn
 	if (!DefaultUnit)
 	{
 		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Unit class in '%s'."), *Instigator->GetName());
-		return;
+		return false;
 	}
 
 	auto UnitCost = DefaultUnit->Stats.Cost;
@@ -99,17 +99,19 @@ void ARvEGameState::SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn
 		});
 
 		GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, DefaultUnit->Stats.SpawnTime / 1000.0f, false);
+
+		return true;
 	}
 
-
+	return false;
 }
 
-void ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned)
+bool ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned)
 {
 	if (!BuildingClassToSpawn)
 	{
 		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Building class in '%s'."), *Instigator->GetName());
-		return;
+		return false;
 	}
 
 	auto DefaultBuilding = Cast<ABuilding>(BuildingClassToSpawn->GetDefaultObject());
@@ -117,7 +119,7 @@ void ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* BuildingClas
 	if (!DefaultBuilding)
 	{
 		UE_LOG(RveDevelopmentError, Error, TEXT("Invalid Building class in '%s'."), *Instigator->GetName());
-		return;
+		return false;
 	}
 
 	auto BuildingCost = DefaultBuilding->Stats.Cost;
@@ -145,7 +147,11 @@ void ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* BuildingClas
 		});
 
 		GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, DefaultBuilding->Stats.SpawnTime / 1000.0f, false);
+
+		return true;
 	}
+
+	return false;
 }
 
 void ARvEGameState::BeginPlay()

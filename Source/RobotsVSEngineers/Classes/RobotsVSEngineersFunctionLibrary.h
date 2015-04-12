@@ -39,10 +39,10 @@ public:
 	static float GetAnimSequenceLength(UAnimSequence* anim);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
-	static void SpawnUnit(const ABuilding* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned);
+	static bool SpawnUnit(const ABuilding* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
-	static void SpawnBuilding(const ABuilding* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned);
+	static bool SpawnBuilding(const ABuilding* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned);
 
 	UFUNCTION(BlueprintCallable, Category = Helpers)
 	static TArray<AUnit*> PushUnit(TArray<AUnit*> InArray, AUnit* unitToPush);
