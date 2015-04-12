@@ -51,6 +51,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Resources)
 	int32 ResourcesGeneratedPerTimeUnit;
 
+	UFUNCTION(BlueprintNativeEvent, Category = UI)
+	void OnSelectionGained();
+
+	virtual void OnSelectionGained_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, Category = UI)
+	void OnSelectionLost();
+
+	virtual void OnSelectionLost_Implementation();
+
 private:
 
 	float TimeToGenerateResources;
