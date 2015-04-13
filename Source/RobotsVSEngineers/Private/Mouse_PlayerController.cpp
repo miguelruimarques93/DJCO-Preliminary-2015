@@ -28,6 +28,12 @@ void AMouse_PlayerController::SetupInputComponent()
 	InputComponent->BindAction("LeftMouseClick", IE_Pressed, this, &AMouse_PlayerController::OnClick);
 }
 
+FRotator AMouse_PlayerController::GetCameraRotation() const 
+{
+	auto TC = GetTransformComponent();
+	return TC ? TC->GetRelativeTransform().GetRotation().Rotator() : FRotator();
+}
+
 ABuilding* AMouse_PlayerController::GetBuildingAtCursor()
 {
 	FHitResult Hit;

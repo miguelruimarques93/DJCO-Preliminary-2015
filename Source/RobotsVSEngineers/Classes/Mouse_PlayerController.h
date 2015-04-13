@@ -26,6 +26,12 @@ class ROBOTSVSENGINEERS_API AMouse_PlayerController : public APlayerController
 
 	virtual void SetupInputComponent();
 
+public:
+
+	UFUNCTION(BlueprintPure, Category = Transform)
+	FRotator GetCameraRotation() const;
+
+
 
 
 	ABuilding* SelectedBuilding;
