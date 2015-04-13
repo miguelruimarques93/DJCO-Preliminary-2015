@@ -16,8 +16,9 @@ CONSTEXPR const int32 ARobotsVSEngineersGameMode::InitialResources = 100;
 ARobotsVSEngineersGameMode::ARobotsVSEngineersGameMode(const class FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	this->PlayerControllerClass = AMouse_PlayerController::StaticClass();
+	PlayerControllerClass = AMouse_PlayerController::StaticClass();
 	GameStateClass = ARvEGameState::StaticClass();
+	DefaultPawnClass = ASpectatorPawn::StaticClass();
 }
 
 bool ARobotsVSEngineersGameMode::OnAllyFaction(const AActor* ActorA, const AActor* ActorB)
