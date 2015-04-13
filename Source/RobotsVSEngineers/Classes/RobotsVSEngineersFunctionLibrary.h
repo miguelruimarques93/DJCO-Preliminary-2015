@@ -55,4 +55,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = Game)
 	static int32 GetCost(UClass* ClassQuery);
+
+	UFUNCTION(BlueprintPure, Category = Game)
+	static int32 GetSpawnTime(UClass* ClassQuery);
 };

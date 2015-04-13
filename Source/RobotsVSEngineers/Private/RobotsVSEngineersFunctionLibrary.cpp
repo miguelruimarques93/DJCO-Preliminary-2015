@@ -107,3 +107,27 @@ int32 URobotsVSEngineersFunctionLibrary::GetCost(UClass* ClassQuery)
 
 	return -1;
 }
+
+int32 URobotsVSEngineersFunctionLibrary::GetSpawnTime(UClass* ClassQuery)
+{
+	if (!ClassQuery)
+	{
+		return -1;
+	}
+
+	auto DefaultUnit = Cast<AUnit>(ClassQuery->GetDefaultObject());
+
+	if (DefaultUnit)
+	{
+		return DefaultUnit->Stats.SpawnTime;
+	}
+
+	auto DefaultBuilding = Cast<ABuilding>(ClassQuery->GetDefaultObject());
+
+	if (DefaultBuilding)
+	{
+		return DefaultBuilding->Stats.SpawnTime;
+	}
+
+	return -1;
+}
