@@ -11,6 +11,7 @@
 #include "RvEGameState.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FUnitSpawned, AUnit*, Unit);
+DECLARE_DYNAMIC_DELEGATE(FUnitResearched);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FBuildingSpawned, ABuilding*, Building);
 
 USTRUCT(BlueprintType)
@@ -113,6 +114,8 @@ public:
 	void AddResources(const ABuilding* Building, uint32 Resources);	
 
 	bool SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned);
+
+	bool ResearchUnit(UFaction Faction, int32 Cost, int32 Time, FUnitResearched UnitResearched);
 
 	bool SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned);
 

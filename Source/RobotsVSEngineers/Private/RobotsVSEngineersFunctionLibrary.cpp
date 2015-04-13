@@ -53,6 +53,16 @@ bool URobotsVSEngineersFunctionLibrary::SpawnUnit(const ABuilding* Instigator, U
 	return false;
 }
 
+bool URobotsVSEngineersFunctionLibrary::ResearchUnit(const ABuilding* Instigator, UFaction Faction, int32 Cost, int32 Time, FUnitResearched UnitResearched)
+{
+	auto GameState = Instigator->GetWorld()->GetGameState<ARvEGameState>();
+
+	if (GameState)
+		return GameState->ResearchUnit(Faction, Cost, Time, UnitResearched);
+
+	return false;
+}
+
 bool URobotsVSEngineersFunctionLibrary::SpawnBuilding(const ABuilding* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned)
 {
 	auto GameState = Instigator->GetWorld()->GetGameState<ARvEGameState>();
@@ -72,4 +82,28 @@ TArray<AUnit*> URobotsVSEngineersFunctionLibrary::PushUnit(TArray<AUnit*> InArra
 AUnit* URobotsVSEngineersFunctionLibrary::TopUnit(TArray<AUnit*> array)
 {
 	return array.Num() > 0 ? array.HeapTop() : nullptr;
+}
+
+int32 URobotsVSEngineersFunctionLibrary::GetCost(UClass* ClassQuery)
+{
+	if (!ClassQuery)
+	{
+		return -1;
+	}
+
+	auto DefaultUnit = Cast<AUnit>(ClassQuery->GetDefaultObject());
+
+	if (DefaultUnit) 
+	{
+		return DefaultUnit->Stats.Cost;
+	}
+
+	auto DefaultBuilding = Cast<ABuilding>(ClassQuery->GetDefaultObject());
+
+	if (DefaultBuilding) 
+	{
+		return DefaultBuilding->Stats.Cost;
+	}
+
+	return -1;
 }

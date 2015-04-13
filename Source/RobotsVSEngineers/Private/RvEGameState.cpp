@@ -111,6 +111,29 @@ bool ARvEGameState::SpawnUnit(const AActor* Instigator, UClass* UnitClassToSpawn
 	return false;
 }
 
+bool ARvEGameState::ResearchUnit(UFaction Faction, int32 Cost, int32 Time, FUnitResearched UnitResearched)
+{
+	auto FactionIndex = static_cast<std::underlying_type_t<UFaction>>(Faction);
+
+	if (PlayersData[FactionIndex].ResourcesAvailable >= Cost) 
+	{
+		PlayersData[FactionIndex].ResourcesAvailable -= Cost;
+
+		FTimerHandle TimerHandle;
+
+		FTimerDelegate TimerDelegate;
+		TimerDelegate.BindLambda([UnitResearched](){
+			UnitResearched.ExecuteIfBound();
+		});
+
+		GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, Time / 1000.0f, false);
+
+		return true;
+	}
+
+	return false;
+}
+
 bool ARvEGameState::SpawnBuilding(const AActor* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned)
 {
 	if (!BuildingClassToSpawn)

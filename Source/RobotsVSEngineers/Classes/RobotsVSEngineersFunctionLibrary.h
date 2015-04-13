@@ -42,6 +42,9 @@ public:
 	static bool SpawnUnit(const ABuilding* Instigator, UClass* UnitClassToSpawn, FVector Location, FUnitSpawned UnitSpawned);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
+	static bool ResearchUnit(const ABuilding* Instigator, UFaction Faction, int32 Cost, int32 Time, FUnitResearched UnitResearched);
+
+	UFUNCTION(BlueprintCallable, Category = Game)
 	static bool SpawnBuilding(const ABuilding* Instigator, UClass* BuildingClassToSpawn, FVector Location, FBuildingSpawned BuildingSpawned);
 
 	UFUNCTION(BlueprintCallable, Category = Helpers)
@@ -49,4 +52,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Helpers)
 	static AUnit* TopUnit(TArray<AUnit*> array);
+
+	UFUNCTION(BlueprintPure, Category = Game)
+	static int32 GetCost(UClass* ClassQuery);
 };
